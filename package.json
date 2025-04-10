@@ -9,8 +9,6 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@picovoice/orca-web": "^1.1.1",
-    "@picovoice/web-voice-processor": "^4.0.9",
     "axios": "^1.8.4",
     "next": "15.3.0",
     "react": "^19.0.0",
