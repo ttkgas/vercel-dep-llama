@@ -42,11 +42,17 @@ export async function POST(request: Request) {
     console.log('Llama response extracted:', llamaResponse);
     return NextResponse.json({ response: llamaResponse });
 
-  } catch (error: any) {
+  } catch (error) {
     console.error('Error in /api/llama:', error);
     // Extract more specific error message from the library if available
-    const errorMessage = error?.message || error?.error?.message || 'Failed to process request';
-    const status = error?.status || 500;
+    // Check if error is an instance of Error first
+    let errorMessage = 'Failed to process request';
+    if (error instanceof Error) {
+        errorMessage = error.message;
+        // Potentially check for more specific error structure from the library if needed
+        // e.g., if (error.response?.data?.error?.message) errorMessage = error.response.data.error.message;
+    }
+    const status = (error as any)?.status || 500; // Keep status extraction if library uses it, but type assertion is needed
     return NextResponse.json(
       { error: errorMessage },
       { status: status }
