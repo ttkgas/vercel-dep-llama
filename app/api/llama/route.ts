@@ -21,7 +21,7 @@ export async function POST(request: Request) {
         { role: "system", content: "You are a helpful assistant." }, // Optional: Add a system message
         { role: "user", content: prompt }
       ],
-      model: "meta-llama/Llama-4-Maverick-17B-128E-Instruct-FP8", // Using the same model as before, adjust if needed
+      model: "deepseek-ai/DeepSeek-V3", // Using the same model as before, adjust if needed
       max_tokens: 1000, // Optional parameters can be added here
       temperature: 0.7,
       top_p: 0.7,
