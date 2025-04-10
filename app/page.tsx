@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import { Orca } from '@picovoice/orca-web';
-import { WebVoiceProcessor } from '@picovoice/web-voice-processor';
 
 export default function Home() {
   const [prompt, setPrompt] = useState('');
@@ -29,7 +28,7 @@ export default function Home() {
         orca.release();
       }
     };
-  }, []);
+  }, [orca]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
