@@ -14,7 +14,9 @@ export default function Home() {
     const initializeOrca = async () => {
       try {
         const accessKey = process.env.NEXT_PUBLIC_PICOVOICE_ACCESS_KEY || '';
-        const orcaInstance = await Orca.create(accessKey);
+        const orcaInstance = await Orca.create(accessKey, {
+          model: { publicPath: '/orca_params.pv' }
+        });
         setOrca(orcaInstance);
       } catch (error) {
         console.error('Error initializing Orca:', error);
