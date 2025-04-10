@@ -49,10 +49,17 @@ export async function POST(request: Request) {
     let errorMessage = 'Failed to process request';
     if (error instanceof Error) {
         errorMessage = error.message;
-        // Potentially check for more specific error structure from the library if needed
-        // e.g., if (error.response?.data?.error?.message) errorMessage = error.response.data.error.message;
     }
-    const status = (error as any)?.status || 500; // Keep status extraction if library uses it, but type assertion is needed
+    
+    // Safely check for and extract status code
+    let status = 500;
+    if (typeof error === 'object' && error !== null && 'status' in error) {
+        const potentialStatus = (error as { status?: unknown }).status;
+        if (typeof potentialStatus === 'number') {
+            status = potentialStatus;
+        }
+    }
+
     return NextResponse.json(
       { error: errorMessage },
       { status: status }
