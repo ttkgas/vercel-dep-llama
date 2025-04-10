@@ -28,9 +28,11 @@ export default function Home() {
       }
 
       setResponse(data.response);
-    } catch (error: any) {
+    } catch (error) {
       console.error('Error:', error);
-      setResponse(`Error processing your request: ${error.message}`);
+      // Check if error is an instance of Error to access message property safely
+      const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
+      setResponse(`Error processing your request: ${errorMessage}`);
     } finally {
       setIsLoading(false);
     }
