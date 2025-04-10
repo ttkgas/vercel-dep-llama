@@ -60,17 +60,27 @@ export default function Home() {
 
     try {
       setIsSpeaking(true);
-      const audioData = await orca.stream(response);
-      const audioContext = new AudioContext();
-      const audioBuffer = await audioContext.decodeAudioData(audioData);
-      const source = audioContext.createBufferSource();
-      source.buffer = audioBuffer;
-      source.connect(audioContext.destination);
-      source.start(0);
+      const result = await orca.synthesize(response);
       
-      source.onended = () => {
+      if (result.pcm) {
+        const audioContext = new AudioContext();
+        const audioBuffer = audioContext.createBuffer(1, result.pcm.length, 16000);
+        const channelData = audioBuffer.getChannelData(0);
+        for (let i = 0; i < result.pcm.length; i++) {
+          channelData[i] = result.pcm[i] / 32768.0;
+        }
+        const source = audioContext.createBufferSource();
+        source.buffer = audioBuffer;
+        source.connect(audioContext.destination);
+        source.start(0);
+        
+        source.onended = () => {
+          setIsSpeaking(false);
+        };
+      } else {
+        console.error('No audio data received from Orca');
         setIsSpeaking(false);
-      };
+      }
     } catch (error) {
       console.error('Error speaking:', error);
       setIsSpeaking(false);
